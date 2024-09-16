@@ -1,0 +1,116 @@
+dataset:
+  NUM_WORKERS: 16
+  BATCH_SIZE: 1
+  img_height: 400
+  img_width: 700
+  in_len: 19
+  out_len: 18 
+  seq_len: 37 
+  plot_stride: 2
+  interval_real_time: 5
+  sample_mode: "sequent"
+  stride: 25 
+  layout: "NTHWC"
+  metrics_mode: "0"
+  metrics_list: ['csi', 'pod', 'sucr', 'bias']
+  threshold_list: [0.6, 1.7, 2.7, 5, 8.6, 15] # This will be logtransformed in the main script!
+  scale_list: [3, 5, 7, 9, 11] # For FSS computation
+layout:
+  in_len: 19
+  out_len: 18
+  layout: "NTHWC"
+optim:
+  total_batch_size: 16
+  micro_batch_size: 2
+  seed: 0
+  method: "adamw"
+  lr: 3.0e-4 
+  wd: 1.0e-4 
+  gradient_clip_val: 1.0 
+  max_epochs: 120 
+  # scheduler
+  # lr_scheduler_mode: "cosine"
+  min_lr_ratio: 1e-4 # Obsolete with the modified OneCycleLR scheduler!
+  warmup_min_lr_ratio: 0.0
+  warmup_percentage: 0.15
+  # early stopping
+  early_stop: true
+  early_stop_mode: "min"
+  early_stop_patience: 15
+  save_top_k: 1
+logging:
+  logging_prefix: "ef4inca"
+  monitor_lr: true
+  monitor_device: false
+  track_grad_norm: -1 
+  use_wandb: false 
+  computeFSS: false # true
+trainer:
+  check_val_every_n_epoch: 1
+  log_step_ratio: 0.001 
+  precision: "16-mixed" 
+vis:
+  train_example_data_idx_list: [0, ]
+  val_example_data_idx_list: [80, ]
+  test_example_data_idx_list: [0, 6, 9, 12, 13, 14, 15, 19, 28, 31, 35, 39, 44, 49, 54, 74, 75, 76, 78, 80, 90, 95, 107, 129, 137, 150, 166, 167, 171, 173, 175, 182, 190, 200, 201, 205, 207, 208, 211, 215, 225, 227, 228, 232, 239, 242, 245, 247, 248, 252, 262, 267, 274, 275, 278, 282, 289, 290, 296, 301, 303, 307, 309, 316, 320, 321, 324, 331, 337, 343, 351, 352, 358, 362, 371, 379, 388, 394, 405, 420, 430, 432, 435, 438, 446, 449, 455, 460, 470, 478, 479, 481, 483, 485, 487, 500, 501, 505, 508, 513, 517, 522, 530, 538, 539, 557, 561, 571, 576, 579, 586, 587, 588, 590, 592, 597, 603, 604, 606, 607, 610, 613, 617, 637, 652, 656, 662, 668, 677, 687, 693, 701, 708, 709, 714, 715, 724, 752, 759, 762, 770, 771, 772, 796, 801, 809, 821, 822, 842, 845, 851, 853, 857, 862, 869, 874, 884, 895, 909, 913, 949, 950, 952, 955, 969, 970, 971, 974, 975, 976, 988, 989, 992, 996, 998, 1004, 1006, 1013, 1015, 1020, 1022, 1037, 1039, 1043, 1051, 1053, 1074, 1078, 1083, 1092, 1099, 1111, 1113, 1116, 1133, 1137, 1138, 1139, 1156, 1159, 1161, 1164, 1184, 1186, 1188, 1193, 1197, 1202, 1204, 1210, 1214, 1215, 1218, 1222, 1223, 1230]
+  eval_example_only: false
+  plot_stride: 2
+model:
+  input_shape: [19, 400, 700, 8]
+  target_shape: [18, 400, 700, 1]
+  base_units: 128
+  scale_alpha: 1.0
+
+  enc_depth: [1, 1]
+  dec_depth: [1, 1]
+  enc_use_inter_ffn: true 
+  dec_use_inter_ffn: true
+  dec_hierarchical_pos_embed: true 
+
+  downsample: 2 
+  downsample_type: "patch_merge" 
+  upsample_type: "upsample" 
+
+  num_global_vectors: 32 
+  use_dec_self_global: true 
+  dec_self_update_global: true
+  use_dec_cross_global: true 
+  use_global_vector_ffn: true 
+  use_global_self_attn: false 
+  separate_global_qkv: false 
+  global_dim_ratio: 1
+
+  self_pattern: "axial"
+  cross_self_pattern: "axial"
+  cross_pattern: "cross_1x1"
+  dec_cross_last_n_frames: null
+
+  attn_drop: 0.1
+  proj_drop: 0.1
+  ffn_drop: 0.1
+  num_heads: 16 
+
+  ffn_activation: "gelu"
+  gated_ffn: true 
+  norm_layer: "layer_norm"
+  padding_type: "zeros"
+  pos_embed_type: "t+h+w"
+  use_relative_pos: true
+  self_attn_use_final_proj: true
+  dec_use_first_self_attn: false
+
+  z_init_method: "zeros"
+  checkpoint_level: 0
+
+  initial_downsample_type: "stack_conv"
+  initial_downsample_activation: "leaky"
+  initial_downsample_stack_conv_num_layers: 2
+  initial_downsample_stack_conv_dim_list: [32, 128]
+  initial_downsample_stack_conv_downscale_list: [3, 2]
+  initial_downsample_stack_conv_num_conv_list: [2, 2]
+
+  attn_linear_init_mode: "0"
+  ffn_linear_init_mode: "0"
+  conv_init_mode: "0"
+  down_up_linear_init_mode: "0"
+  norm_init_mode: "0"
