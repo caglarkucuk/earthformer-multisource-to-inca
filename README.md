@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Welcome to the EF4INCA repository, which is accompanying our work ''[Integrated nowcasting of convective precipitation with Transformer-based models using multi-source data](https://doi.org/XXXXXXX)''
+Welcome to the EF4INCA repository, which is accompanying our work [Integrated nowcasting of convective precipitation with Transformer-based models using multi-source data](https://arxiv.org/abs/2409.10367)
 
 EF4INCA is a precipitation nowcasting model that takes data from multiple sources (e.g., satellite-, groun-based observations, modelled data). It is a modified version of the [EF-Sat2Rad](https://github.com/caglarkucuk/earthformer-satellite-to-radar/) model, which heavily borrows from the original [Earthformer](https://github.com/amazon-science/earth-forecasting-transformer) package. 
 
@@ -77,7 +77,7 @@ Please cite us if this repo helps your work!
 @article{Kucuk2024,
    title = {Integrated nowcasting of convective precipitation with Transformer-based models using multi-source data},
    author = {K\"u\c{c}\"uk, {\c{C}}a\u{g}lar and Atencia, Aitor and Dabernig, Markus},
-   doi = {xx.xxxxxx/arXiv.xxxx.xxxxx},
+   doi = {10.48550/arXiv.2409.10367},
    year = {2024}
 }
 ``` 
